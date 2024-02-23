@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "nodemon --exec node server.js"
+    "dev": "nodemon --exec babel-node server"
   },
   "repository": {
     "type": "git",
@@ -16,10 +16,14 @@
   },
   "homepage": "https://github.com/wlarkspur/insta-backend#readme",
   "dependencies": {
+    "@babel/node": "^7.23.9",
     "apollo-server": "^2.25.2",
     "graphql": "^15.8.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.9",
+    "@babel/preset-env": "^7.23.9",
     "nodemon": "^3.0.3"
-  }
+  },
+  "type": "module"
 }
