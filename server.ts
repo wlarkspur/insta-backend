@@ -1,34 +1,58 @@
+import { PrismaClient } from "@prisma/client";
+
 import { ApolloServer, gql } from "apollo-server";
+
+const client = new PrismaClient();
 
 const typeDefs = gql`
   type Movie {
-    title: String
-    year: Int
+    id: Int!
+    title: String!
+    year: Int!
+    genre: String
+    createdAt: String!
+    updatedAt: String!
   }
   type Query {
     movies: [Movie]
-    movie: Movie
+    movie(id: Int!): Movie
   }
   type Mutation {
-    createMovie(title: String!): Boolean
-    deleteMovie(title: String!): Boolean
+    createMovie(title: String!, year: Int!, genre: String): Movie
+    deleteMovie(id: Int!): Movie
+    updateMovie(id: Int!, year: Int!): Movie
   }
 `;
 
+interface IMutation {
+  id: number;
+  title: string;
+  year: number;
+  genre: string;
+}
+
 const resolvers = {
   Query: {
-    movies: () => [],
-    movie: () => ({ title: "Hello", year: 2023 }),
+    movies: () => client.movie.findMany(),
+    movie: (_: any, { id }: { id: number }) =>
+      client.movie.findUnique({ where: { id } }),
   },
+
   Mutation: {
-    createMovie: (_, { title }) => {
-      console.log(title);
-      return true;
+    createMovie: (_: any, { title, year, genre }: IMutation) => {
+      const movie = client.movie.create({
+        data: {
+          title,
+          year,
+          genre,
+        },
+      });
+      return movie;
     },
-    deleteMovie: (_, { title }) => {
-      console.log(title);
-      return true;
-    },
+    deleteMovie: (_: any, { id }: IMutation) =>
+      client.movie.delete({ where: { id } }),
+    updateMovie: (_: any, { id, year }: IMutation) =>
+      client.movie.update({ where: { id }, data: { year } }),
   },
 };
 
