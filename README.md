@@ -1,6 +1,6 @@
 # Instaclone
 
-Instanclone Backend
+Instanclone Backend.
 
 ## User:
 
