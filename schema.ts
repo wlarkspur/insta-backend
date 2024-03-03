@@ -5,7 +5,7 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 const loadedTypes = loadFilesSync(`${__dirname}/**/*.typeDefs.ts`);
 // /**/*.  모든 폴더, 모든 파일을 검색
 const loadedResolvers = loadFilesSync(
-  `${__dirname}/**/*.{queries,mutations}.ts`
+  `${__dirname}/**/*.{queries,resolvers}.ts`
 );
 const typeDefs = mergeTypeDefs(loadedTypes);
 const resolvers = mergeResolvers(loadedResolvers);
