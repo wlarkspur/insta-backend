@@ -1,19 +1,12 @@
-import bcrypt from "bcrypt";
-import client from "../../client";
+import * as bcrypt from "bcrypt";
+import { Resolvers } from "../../types";
 
-interface IAccount {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-}
-
-export default {
+const resolvers: Resolvers = {
   Mutation: {
     createAccount: async (
-      _: any,
-      { firstName, lastName, username, email, password }: IAccount
+      _,
+      { firstName, lastName, username, email, password },
+      { client }
     ) => {
       try {
         // check if username or email are already on DB.
@@ -48,3 +41,5 @@ export default {
     },
   },
 };
+
+export default resolvers;

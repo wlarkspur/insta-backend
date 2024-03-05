@@ -1,29 +1,14 @@
-import bcrypt from "bcrypt";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import client from "../../client";
+import * as bcrypt from "bcrypt";
 import { protectedResolver } from "../users.utils";
+import { Resolvers } from "../../types";
 
-interface IEditProfile {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-}
-
-export default {
+const resolvers: Resolvers = {
   Mutation: {
     editProfile: protectedResolver(
       async (
-        _: any,
-        {
-          firstName,
-          lastName,
-          username,
-          email,
-          password: newpassword,
-        }: IEditProfile,
-        { loggedInUser }: any
+        _,
+        { firstName, lastName, username, email, password: newpassword },
+        { loggedInUser, client }
       ) => {
         //토큰을 내가 만들고, 변경되지 않았음을 확인.
         // id 는 verifiedToken 값의 id를 의미.
@@ -34,7 +19,7 @@ export default {
         }
         const updatedUser = await client.user.update({
           where: {
-            id: loggedInUser.id,
+            id: loggedInUser?.id,
           },
           data: {
             firstName,
@@ -58,3 +43,5 @@ export default {
     ),
   },
 };
+
+export default resolvers;

@@ -1,18 +1,10 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import client from "../../client";
+import * as bcrypt from "bcrypt";
+import * as jwt from "jsonwebtoken";
+import { Resolvers } from "../../types";
 
-interface IAccount {
-  firstName: string;
-  lastName: string;
-  username: string;
-  email: string;
-  password: string;
-}
-
-export default {
+const resolvers: Resolvers = {
   Mutation: {
-    login: async (_: any, { username, password }: IAccount) => {
+    login: async (_, { username, password }, { client }) => {
       const user = await client.user.findFirst({ where: { username } });
       if (!user) {
         return {
@@ -38,3 +30,5 @@ export default {
     },
   },
 };
+
+export default resolvers;
