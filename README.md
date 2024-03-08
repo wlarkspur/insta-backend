@@ -7,7 +7,10 @@ Instanclone Backend.
 - [x] Create Account
 - [x] See Profile
 - [x] Login
-- [ ] Edit Profile
-- [ ] Follow User
-- [ ] Unfollow User
+- [x] Edit Profile
+- [x] Follow User
+- [x] Unfollow User
+- [ ] See Followers
+- [ ] See Following
+- [ ] computed Fields
 - [ ] Change Avatar (Image Upload)
