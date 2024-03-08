@@ -21,11 +21,17 @@ const resolvers: Resolvers = {
       ) => {
         //토큰을 내가 만들고, 변경되지 않았음을 확인.
         // id 는 verifiedToken 값의 id를 의미.
-        const { filename, createReadStream } = await avatar;
-        const readStream = createReadStream();
-        const writeStream =
-          createWriteStream(process.cwd()) + "/uploads/" + filename;
-        readStream.pipe(writeStream);
+        let avatarUrl = null;
+        if (avatar) {
+          const { filename, createReadStream } = await avatar;
+          const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
+          const readStream = createReadStream();
+          const writeStream = createWriteStream(
+            process.cwd() + "/uploads/" + newFilename
+          );
+          readStream.pipe(writeStream);
+          avatarUrl = `http://localhost:4000/static/${newFilename}`;
+        }
         let uglyPassword = null;
         if (newpassword) {
           uglyPassword = await bcrypt.hash(newpassword, 10);
@@ -40,8 +46,8 @@ const resolvers: Resolvers = {
             username,
             email,
             bio,
-
             ...(uglyPassword && { password: uglyPassword }),
+            ...(avatarUrl && { avatar: avatarUrl }),
           },
         });
         if (updatedUser.id) {
