@@ -11,5 +11,5 @@ Instanclone Backend.
 - [x] Follow User
 - [x] Unfollow User
 - [x] See Followers, Following
-- [ ] Computed Fields
-- [ ] Change Avatar (Image Upload)
+- [x] Computed Fields
+- [x] Search Users
