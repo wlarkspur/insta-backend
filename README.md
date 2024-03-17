@@ -22,11 +22,17 @@ Instanclone Backend.
 - [x] Search Photos
 - [x] Edit Photo
 - [x] Like / Unlike Photo
-- [ ] See Photo Likes
-- [ ] See Feed
+- [x] See Photo Likes
+- [x] See Feed
+- [x] See Photo Comments
+- [ ] Delete Photo
 
 ## Comments
 
-- [ ] Comment on Photo
+- [x] Comment on Photo
 - [ ] Edit Comment
-- [ ] Delete Comment
+- [ ] Delete Comment (Is Mine)
+
+## Extras
+
+- [ ] S3 Image Upload
