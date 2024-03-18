@@ -4,7 +4,7 @@ import { protectedResolver } from "../../users/users.utils";
 
 const resolvers: Resolvers = {
   Query: {
-    seeFeed: protectedResolver((_, {}, { loggedInUser }) =>
+    seeFeed: protectedResolver((_, __, { loggedInUser }) =>
       client.photo.findMany({
         where: {
           OR: [
