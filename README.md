@@ -39,4 +39,4 @@ Instanclone Backend.
 
 ## Extras
 
-- [ ] S3 Image Upload - setting
+- [x] S3 Image Upload - setting
