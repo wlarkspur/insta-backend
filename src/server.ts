@@ -14,14 +14,33 @@ const PORT = process.env.PORT;
 const apollo = new ApolloServer({
   resolvers,
   typeDefs,
-  context: async ({ req }) => {
-    if (req) {
+  //ctx는 HTTP or websocket context가 될 수 있다.
+  context: async (ctx) => {
+    if (ctx.req) {
       return {
-        loggedInUser: await getUser(req.headers.token),
+        loggedInUser: await getUser(ctx.req.headers.token),
         client,
         protectedResolver,
       };
+    } else {
+      const {
+        connection: { context },
+      } = ctx;
+      return {
+        loggedInUser: context.loggedInUser,
+      };
     }
+  },
+  subscriptions: {
+    onConnect: async ({ token }: { token?: string }) => {
+      if (!token) {
+        throw new Error("You can't listen");
+      } // token authentication option은 public설정시 삭제해도 됨.
+      const loggedInUser = await getUser(token);
+      return {
+        loggedInUser,
+      };
+    },
   },
 });
 

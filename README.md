@@ -47,5 +47,5 @@ Instanclone Backend.
 - [x] Send Message (Create Room)
 - [x] See Room
 - [x] Computed Fields
-- [ ] see (Read) Messages
-- [ ] Realtime Messages
+- [x] see (Read) Messages
+- [x] Realtime Messages

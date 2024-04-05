@@ -8,9 +8,15 @@ export default {
   Subscription: {
     roomUpdates: {
       subscribe: async (root, args, context, info) => {
-        const room = await client.room.findUnique({
+        console.log(context);
+        const room = await client.room.findFirst({
           where: {
             id: args.id,
+            users: {
+              some: {
+                id: context.loggedInUser.id,
+              },
+            },
           },
           select: {
             id: true,
@@ -21,12 +27,21 @@ export default {
         }
         return withFilter(
           () => pubsub.asyncIterator(NEW_MESSAGE),
-          ({ roomUpdates }, { id }) => {
+          ({ roomUpdates }, { id }, { loggedInUser }) => {
+            console.log(loggedInUser);
             return roomUpdates.roomId === id;
-            return true;
           }
-        )(root, args, context, info);
+        )(root, args, context, info); //뒤에 root...후 값 들은 return
       },
     },
   },
 };
+
+/* 
+export default {
+  Subscription: {
+    roomUpdates: {
+      subscribe:()=>pubsub.asyncIterator(NEW_MESSAGE)
+    }
+  }
+} */
