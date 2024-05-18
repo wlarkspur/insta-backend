@@ -24,6 +24,29 @@ export default {
       }
       return userId === loggedInUser.id;
     },
+    isLiked: async ({ id }, _, { loggedInUser }) => {
+      if (!loggedInUser) {
+        return false;
+      }
+      const ok = await client.like.findUnique({
+        where: {
+          photoId_userId: {
+            photoId: id,
+            userId: loggedInUser.id,
+          },
+        },
+        select: {
+          id: true,
+        },
+      });
+      //현재 loggedInUser 본인의 like가 있어야 ok = true가 된다.
+      //왜 이렇게 강의에서 하는지 일단 지켜보고 수정필요,
+      // where 단에서 userId: loggedInUser.id 변수를 지우면 해결될 것
+      if (ok) {
+        return true;
+      }
+      return false;
+    },
   },
   Hashtag: {
     photos: ({ id }, { page }, { loggedInUser }) => {
