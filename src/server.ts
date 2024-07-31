@@ -47,6 +47,7 @@ const apollo = new ApolloServer({
 //Web Socket 에는 req,res 가 없다.
 
 const app = express();
+
 app.use(logger("tiny"));
 apollo.applyMiddleware({ app });
 

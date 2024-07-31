@@ -6,5 +6,6 @@ const loadedTypes = loadFilesSync(`${__dirname}/**/*.typeDefs.ts`);
 const loadedResolvers = loadFilesSync(
   `${__dirname}/**/*.{queries,resolvers}.ts`
 );
+
 export const typeDefs = mergeTypeDefs(loadedTypes);
 export const resolvers: any = mergeResolvers(loadedResolvers);
