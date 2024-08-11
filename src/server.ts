@@ -1,3 +1,5 @@
+import { graphqlUploadExpress } from "graphql-upload-ts";
+
 require("dotenv").config();
 import http from "http";
 import express from "express";
@@ -12,8 +14,9 @@ console.log(pubsub);
 
 const PORT = process.env.PORT;
 const apollo = new ApolloServer({
-  resolvers,
   typeDefs,
+  resolvers,
+  uploads: false, //Apollo Server 3.x 이하에서는 이 옵션을 설정해야 한다 ??
   //ctx는 HTTP or websocket context가 될 수 있다.
   context: async (ctx) => {
     if (ctx.req) {
@@ -47,7 +50,13 @@ const apollo = new ApolloServer({
 //Web Socket 에는 req,res 가 없다.
 
 const app = express();
-
+app.use(
+  graphqlUploadExpress({
+    maxFileSize: 50000000,
+    maxFiles: 10,
+    overrideSendResponse: false,
+  })
+);
 app.use(logger("tiny"));
 apollo.applyMiddleware({ app });
 
