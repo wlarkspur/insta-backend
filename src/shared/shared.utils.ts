@@ -36,13 +36,6 @@ export const uploadToS3 = async (file, userId, folderName) => {
     const { filename, createReadStream } = await file;
     const readStream = createReadStream();
 
-    // 스트림 상태 출력
-    /* console.log("스트림 상태 초기:", {
-      path: readStream.path, // 경로 확인
-      readable: readStream.readable, // 스트림이 읽을 수 있는지 확인
-      _readableState: readStream._readableState, // 내부 상태 확인
-    }); */
-
     // 스트림을 임시 파일로 저장
     const tempFilePath = await saveStreamToTempFile(readStream, filename);
     // 임시 파일 경로 출력
