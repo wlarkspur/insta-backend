@@ -1,5 +1,4 @@
 import { graphqlUploadExpress } from "graphql-upload-ts";
-
 require("dotenv").config();
 import http from "http";
 import express from "express";
@@ -35,7 +34,8 @@ const apollo = new ApolloServer({
     }
   },
   subscriptions: {
-    onConnect: async ({ token }: { token?: string }) => {
+    onConnect: async ({ token }: any) => {
+      /* console.log(token); */
       if (!token) {
         throw new Error("You can't listen");
       } // token authentication option은 public설정시 삭제해도 됨.
