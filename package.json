@@ -1,8 +1,13 @@
 {
   "name": "instaclone",
   "version": "1.0.0",
+  "engines": {
+    "node":"20.x",
+    "npm":"10.8.1"
+  },
   "description": "",
   "scripts": {
+    "heroku-postbuild": "npm install --legacy-peer-deps",
     "preinstall": "npx npm-force-resolutions",
     "dev": "nodemon --exec ts-node src/server  --ext ts,js",
     "migrate": "npx prisma migrate dev",
@@ -61,4 +66,5 @@
   "resolutions": {
     "fs-capacitor": "3.0.0"
   }
+
 }
