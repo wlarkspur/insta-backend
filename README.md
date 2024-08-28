@@ -49,3 +49,7 @@ Instanclone Backend.
 - [x] Computed Fields
 - [x] see (Read) Messages
 - [x] Realtime Messages
+
+"scripts": {
+"heroku-postbuild": "npm install --legacy-peer-deps"
+}
