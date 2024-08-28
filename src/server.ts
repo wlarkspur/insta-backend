@@ -17,6 +17,7 @@ const apollo = new ApolloServer({
   resolvers,
   uploads: false, //Apollo Server 3.x 이하에서는 이 옵션을 설정해야 한다 ??
   playground: true,
+  introspection: true,
   //ctx는 HTTP or websocket context가 될 수 있다.
   context: async (ctx) => {
     if (ctx.req) {
