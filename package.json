@@ -7,7 +7,7 @@
   },
   "description": "",
   "scripts": {
-    "heroku-postbuild": "npm run build",
+    "heroku-postbuild": "npm install --legacy-peer-deps && npm run build",
     "postbuild": "node scripts/adjustPaths.ts",
     "preinstall": "npx npm-force-resolutions",
     "dev": "nodemon --exec ts-node src/server  --ext ts,js",
