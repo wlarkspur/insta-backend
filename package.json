@@ -50,12 +50,10 @@
     "graphql-tools": "^9.0.1",
     "graphql-upload": "^14.0.0",
     "graphql-upload-ts": "^2.1.2",
-    "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "prisma": "^5.10.2",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "prisma": "^5.10.2"
+    
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -63,6 +61,9 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20.11.20",
     "glob": "^11.0.0",
+    "install": "^0.13.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3",
     "nodemon": "^3.0.3"
   },
   "resolutions": {
