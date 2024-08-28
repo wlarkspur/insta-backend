@@ -1,60 +1,93 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = __importDefault(require("../client"));
-exports.default = {
-    User: {
-        totalFollowing: ({ id }) => client_1.default.user.count({
-            where: {
-                followers: {
-                    some: {
-                        id,
-                    },
-                },
-            },
-        }),
-        totalFollowers: ({ id }) => client_1.default.user.count({
-            where: {
-                following: {
-                    some: {
-                        id,
-                    },
-                },
-            },
-        }),
-        isMe: ({ id }, _, { loggedInUser }) => {
-            if (!loggedInUser) {
-                return false;
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+var _client = _interopRequireDefault(require("../client"));
+var _default = exports["default"] = {
+  User: {
+    totalFollowing: function totalFollowing(_ref) {
+      var id = _ref.id;
+      return _client["default"].user.count({
+        where: {
+          followers: {
+            some: {
+              id: id
             }
-            return id === loggedInUser.id;
-        },
-        isFollowing: (_a, _1, _b) => __awaiter(void 0, [_a, _1, _b], void 0, function* ({ id }, _, { loggedInUser }) {
-            if (!loggedInUser) {
-                return false;
-            }
-            const exists = yield client_1.default.user.count({
-                where: {
-                    username: loggedInUser.username,
-                    following: {
-                        some: {
-                            id,
-                        },
-                    },
-                },
-            });
-            return Boolean(exists);
-        }),
-        photos: ({ id }) => client_1.default.user.findUnique({ where: { id } }).photos(),
+          }
+        }
+      });
     },
+    totalFollowers: function totalFollowers(_ref2) {
+      var id = _ref2.id;
+      return _client["default"].user.count({
+        where: {
+          following: {
+            some: {
+              id: id
+            }
+          }
+        }
+      });
+    },
+    isMe: function isMe(_ref3, _, _ref4) {
+      var id = _ref3.id;
+      var loggedInUser = _ref4.loggedInUser;
+      if (!loggedInUser) {
+        return false;
+      }
+      return id === loggedInUser.id;
+    },
+    isFollowing: function () {
+      var _isFollowing = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref5, _, _ref6) {
+        var id, loggedInUser, exists;
+        return _regenerator["default"].wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              id = _ref5.id;
+              loggedInUser = _ref6.loggedInUser;
+              if (loggedInUser) {
+                _context.next = 4;
+                break;
+              }
+              return _context.abrupt("return", false);
+            case 4:
+              _context.next = 6;
+              return _client["default"].user.count({
+                where: {
+                  username: loggedInUser.username,
+                  following: {
+                    some: {
+                      id: id
+                    }
+                  }
+                }
+              });
+            case 6:
+              exists = _context.sent;
+              return _context.abrupt("return", Boolean(exists));
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      function isFollowing(_x, _x2, _x3) {
+        return _isFollowing.apply(this, arguments);
+      }
+      return isFollowing;
+    }(),
+    photos: function photos(_ref7) {
+      var id = _ref7.id;
+      return _client["default"].user.findUnique({
+        where: {
+          id: id
+        }
+      }).photos();
+    }
+  }
 };

@@ -1,33 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const apollo_server_1 = require("apollo-server");
-exports.default = (0, apollo_server_1.gql) `
-  type Photo {
-    id: Int!
-    user: User!
-    file: String!
-    caption: String
-    likes: Int!
-    commentNumber: Int!
-    comments: [Comment]
-    hashtags: [Hashtag]
-    createdAt: String!
-    updatedAt: String!
-    isMine: Boolean!
-    isLiked: Boolean!
-  }
-  type Hashtag {
-    id: Int!
-    hashtag: String!
-    photos(page: Int!): [Photo]
-    totalPhotos: Int!
-    createdAt: String!
-    updatedAt: String!
-  }
-  type Like {
-    id: Int!
-    photo: Photo!
-    createdAt: String!
-    updatedAt: String!
-  }
-`;
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
+var _apolloServer = require("apollo-server");
+var _templateObject;
+var _default = exports["default"] = (0, _apolloServer.gql)(_templateObject || (_templateObject = (0, _taggedTemplateLiteral2["default"])(["\n  type Photo {\n    id: Int!\n    user: User!\n    file: String!\n    caption: String\n    likes: Int!\n    commentNumber: Int!\n    comments: [Comment]\n    hashtags: [Hashtag]\n    createdAt: String!\n    updatedAt: String!\n    isMine: Boolean!\n    isLiked: Boolean!\n  }\n  type Hashtag {\n    id: Int!\n    hashtag: String!\n    photos(page: Int!): [Photo]\n    totalPhotos: Int!\n    createdAt: String!\n    updatedAt: String!\n  }\n  type Like {\n    id: Int!\n    photo: Photo!\n    createdAt: String!\n    updatedAt: String!\n  }\n"])));

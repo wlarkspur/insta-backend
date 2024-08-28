@@ -1,94 +1,143 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = __importDefault(require("../client"));
-exports.default = {
-    Photo: {
-        user: ({ userId }) => {
-            return client_1.default.user.findUnique({ where: { id: userId } });
-        },
-        hashtags: ({ id }) => {
-            return client_1.default.hashtag.findMany({
-                where: {
-                    photos: {
-                        some: {
-                            id,
-                        },
-                    },
-                },
-            });
-        },
-        likes: ({ id }) => client_1.default.like.count({ where: { photoId: id } }),
-        commentNumber: ({ id }) => client_1.default.comment.count({ where: { photoId: id } }),
-        comments: ({ id }) => client_1.default.comment.findMany({
-            where: { photoId: id },
-            include: {
-                user: true,
-            },
-        }),
-        isMine: ({ userId }, _, { loggedInUser }) => {
-            if (!loggedInUser) {
-                return false;
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+var _client = _interopRequireDefault(require("../client"));
+var _default = exports["default"] = {
+  Photo: {
+    user: function user(_ref) {
+      var userId = _ref.userId;
+      return _client["default"].user.findUnique({
+        where: {
+          id: userId
+        }
+      });
+    },
+    hashtags: function hashtags(_ref2) {
+      var id = _ref2.id;
+      return _client["default"].hashtag.findMany({
+        where: {
+          photos: {
+            some: {
+              id: id
             }
-            return userId === loggedInUser.id;
+          }
+        }
+      });
+    },
+    likes: function likes(_ref3) {
+      var id = _ref3.id;
+      return _client["default"].like.count({
+        where: {
+          photoId: id
+        }
+      });
+    },
+    commentNumber: function commentNumber(_ref4) {
+      var id = _ref4.id;
+      return _client["default"].comment.count({
+        where: {
+          photoId: id
+        }
+      });
+    },
+    comments: function comments(_ref5) {
+      var id = _ref5.id;
+      return _client["default"].comment.findMany({
+        where: {
+          photoId: id
         },
-        isLiked: (_a, _1, _b) => __awaiter(void 0, [_a, _1, _b], void 0, function* ({ id }, _, { loggedInUser }) {
-            if (!loggedInUser) {
-                return false;
-            }
-            const ok = yield client_1.default.like.findUnique({
+        include: {
+          user: true
+        }
+      });
+    },
+    isMine: function isMine(_ref6, _, _ref7) {
+      var userId = _ref6.userId;
+      var loggedInUser = _ref7.loggedInUser;
+      if (!loggedInUser) {
+        return false;
+      }
+      return userId === loggedInUser.id;
+    },
+    isLiked: function () {
+      var _isLiked = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref8, _, _ref9) {
+        var id, loggedInUser, ok;
+        return _regenerator["default"].wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              id = _ref8.id;
+              loggedInUser = _ref9.loggedInUser;
+              if (loggedInUser) {
+                _context.next = 4;
+                break;
+              }
+              return _context.abrupt("return", false);
+            case 4:
+              _context.next = 6;
+              return _client["default"].like.findUnique({
                 where: {
-                    photoId_userId: {
-                        photoId: id,
-                        userId: loggedInUser.id,
-                    },
+                  photoId_userId: {
+                    photoId: id,
+                    userId: loggedInUser.id
+                  }
                 },
                 select: {
-                    id: true,
-                },
-            });
-            //현재 loggedInUser 본인의 like가 있어야 ok = true가 된다.
-            //왜 이렇게 강의에서 하는지 일단 지켜보고 수정필요,
-            // where 단에서 userId: loggedInUser.id 변수를 지우면 해결될 것
-            if (ok) {
-                return true;
+                  id: true
+                }
+              });
+            case 6:
+              ok = _context.sent;
+              if (!ok) {
+                _context.next = 9;
+                break;
+              }
+              return _context.abrupt("return", true);
+            case 9:
+              return _context.abrupt("return", false);
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      function isLiked(_x, _x2, _x3) {
+        return _isLiked.apply(this, arguments);
+      }
+      return isLiked;
+    }()
+  },
+  Hashtag: {
+    photos: function photos(_ref10, _ref11, _ref12) {
+      var id = _ref10.id;
+      var page = _ref11.page;
+      var loggedInUser = _ref12.loggedInUser;
+      return _client["default"].hashtag.findUnique({
+        where: {
+          id: id
+        }
+      }).photos({
+        take: 2,
+        skip: (page - 1) * 2
+      });
+      //photo()안의 코드는 pagination을 구현해 봄
+    },
+    totalPhotos: function totalPhotos(_ref13) {
+      var id = _ref13.id;
+      return _client["default"].photo.count({
+        where: {
+          hashtags: {
+            some: {
+              id: id
             }
-            return false;
-        }),
-    },
-    Hashtag: {
-        photos: ({ id }, { page }, { loggedInUser }) => {
-            return client_1.default.hashtag
-                .findUnique({
-                where: {
-                    id,
-                },
-            })
-                .photos({
-                take: 2,
-                skip: (page - 1) * 2,
-            });
-            //photo()안의 코드는 pagination을 구현해 봄
-        },
-        totalPhotos: ({ id }) => client_1.default.photo.count({
-            where: {
-                hashtags: {
-                    some: {
-                        id,
-                    },
-                },
-            },
-        }),
-    },
+          }
+        }
+      });
+    }
+  }
 };

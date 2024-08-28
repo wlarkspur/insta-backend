@@ -1,35 +1,38 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _client = _interopRequireDefault(require("../../client"));
+var _users = require("../../users/users.utils");
+var resolvers = {
+  Query: {
+    seeFeed: (0, _users.protectedResolver)(function (_, _ref, _ref2) {
+      var offset = _ref.offset;
+      var loggedInUser = _ref2.loggedInUser;
+      return _client["default"].photo.findMany({
+        take: 2,
+        skip: offset,
+        where: {
+          OR: [{
+            user: {
+              followers: {
+                some: {
+                  id: loggedInUser.id
+                }
+              }
+            }
+          }, {
+            userId: loggedInUser.id
+          }]
+        },
+        orderBy: {
+          createdAt: "desc"
+        }
+      });
+    })
+  }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = __importDefault(require("../../client"));
-const users_utils_1 = require("../../users/users.utils");
-const resolvers = {
-    Query: {
-        seeFeed: (0, users_utils_1.protectedResolver)((_, { offset }, { loggedInUser }) => client_1.default.photo.findMany({
-            take: 2,
-            skip: offset,
-            where: {
-                OR: [
-                    {
-                        user: {
-                            followers: {
-                                some: {
-                                    id: loggedInUser.id,
-                                },
-                            },
-                        },
-                    },
-                    {
-                        userId: loggedInUser.id,
-                    },
-                ],
-            },
-            orderBy: {
-                createdAt: "desc",
-            },
-        })),
-    },
-};
-exports.default = resolvers;
+var _default = exports["default"] = resolvers;

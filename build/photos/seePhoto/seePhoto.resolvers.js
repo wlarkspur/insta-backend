@@ -1,16 +1,21 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _client = _interopRequireDefault(require("../../client"));
+var resolvers = {
+  Query: {
+    seePhoto: function seePhoto(_, _ref) {
+      var id = _ref.id;
+      return _client["default"].photo.findUnique({
+        where: {
+          id: id
+        }
+      });
+    }
+  }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = __importDefault(require("../../client"));
-const resolvers = {
-    Query: {
-        seePhoto: (_, { id }) => client_1.default.photo.findUnique({
-            where: {
-                id,
-            },
-        }),
-    },
-};
-exports.default = resolvers;
+var _default = exports["default"] = resolvers;

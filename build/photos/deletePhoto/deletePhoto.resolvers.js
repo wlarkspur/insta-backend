@@ -1,54 +1,74 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = __importDefault(require("../../client"));
-const users_utils_1 = require("../../users/users.utils");
-const resolvers = {
-    Mutation: {
-        deletePhoto: (0, users_utils_1.protectedResolver)((root_1, _a, _b) => __awaiter(void 0, [root_1, _a, _b], void 0, function* (root, { id }, { loggedInUser }) {
-            console.log(root);
-            const photo = yield client_1.default.photo.findUnique({
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+var _client = _interopRequireDefault(require("../../client"));
+var _users = require("../../users/users.utils");
+var resolvers = {
+  Mutation: {
+    deletePhoto: (0, _users.protectedResolver)( /*#__PURE__*/function () {
+      var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(root, _ref, _ref2) {
+        var id, loggedInUser, photo;
+        return _regenerator["default"].wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              id = _ref.id;
+              loggedInUser = _ref2.loggedInUser;
+              console.log(root);
+              _context.next = 5;
+              return _client["default"].photo.findUnique({
                 where: {
-                    id,
+                  id: id
                 },
                 select: {
-                    userId: true,
-                },
-            });
-            if (!photo) {
-                return {
-                    ok: false,
-                    error: "Photo not found :(",
-                };
-            }
-            else if (photo.userId !== loggedInUser.id) {
-                return {
-                    ok: false,
-                    error: "Not authorized",
-                };
-            }
-            else {
-                yield client_1.default.photo.delete({
-                    where: {
-                        id,
-                    },
-                });
-                return {
-                    ok: true,
-                };
-            }
-        })),
-    },
+                  userId: true
+                }
+              });
+            case 5:
+              photo = _context.sent;
+              if (photo) {
+                _context.next = 10;
+                break;
+              }
+              return _context.abrupt("return", {
+                ok: false,
+                error: "Photo not found :("
+              });
+            case 10:
+              if (!(photo.userId !== loggedInUser.id)) {
+                _context.next = 14;
+                break;
+              }
+              return _context.abrupt("return", {
+                ok: false,
+                error: "Not authorized"
+              });
+            case 14:
+              _context.next = 16;
+              return _client["default"].photo["delete"]({
+                where: {
+                  id: id
+                }
+              });
+            case 16:
+              return _context.abrupt("return", {
+                ok: true
+              });
+            case 17:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      return function (_x, _x2, _x3) {
+        return _ref3.apply(this, arguments);
+      };
+    }())
+  }
 };
-exports.default = resolvers;
+var _default = exports["default"] = resolvers;
