@@ -21,6 +21,7 @@ var apollo = new _apolloServerExpress.ApolloServer({
   uploads: false,
   //Apollo Server 3.x 이하에서는 이 옵션을 설정해야 한다 ??
   playground: true,
+  introspection: true,
   //ctx는 HTTP or websocket context가 될 수 있다.
   context: function () {
     var _context = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(ctx) {
