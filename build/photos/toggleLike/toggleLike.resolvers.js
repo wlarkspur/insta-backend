@@ -1,94 +1,67 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _client = _interopRequireDefault(require("../../client"));
-var _users = require("../../users/users.utils");
-var resolvers = {
-  Mutation: {
-    toggleLike: (0, _users.protectedResolver)( /*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, _ref, _ref2) {
-        var id, loggedInUser, photo, likeWhere, like;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              id = _ref.id;
-              loggedInUser = _ref2.loggedInUser;
-              _context.next = 4;
-              return _client["default"].photo.findUnique({
-                where: {
-                  id: id
-                }
-              });
-            case 4:
-              photo = _context.sent;
-              if (photo) {
-                _context.next = 7;
-                break;
-              }
-              return _context.abrupt("return", {
-                ok: false,
-                error: "Photo not found :("
-              });
-            case 7:
-              likeWhere = {
-                photoId_userId: {
-                  userId: loggedInUser.id,
-                  photoId: id
-                }
-              };
-              _context.next = 10;
-              return _client["default"].like.findUnique({
-                where: likeWhere
-              });
-            case 10:
-              like = _context.sent;
-              if (!like) {
-                _context.next = 16;
-                break;
-              }
-              _context.next = 14;
-              return _client["default"].like["delete"]({
-                where: likeWhere
-              });
-            case 14:
-              _context.next = 18;
-              break;
-            case 16:
-              _context.next = 18;
-              return _client["default"].like.create({
-                data: {
-                  user: {
-                    connect: {
-                      id: loggedInUser.id
-                    }
-                  },
-                  photo: {
-                    connect: {
-                      id: photo.id
-                    }
-                  }
-                }
-              });
-            case 18:
-              return _context.abrupt("return", {
-                ok: true
-              });
-            case 19:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      return function (_x, _x2, _x3) {
-        return _ref3.apply(this, arguments);
-      };
-    }())
-  }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-var _default = exports["default"] = resolvers;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../../client"));
+const users_utils_1 = require("../../users/users.utils");
+const resolvers = {
+    Mutation: {
+        toggleLike: (0, users_utils_1.protectedResolver)((_1, _a, _b) => __awaiter(void 0, [_1, _a, _b], void 0, function* (_, { id }, { loggedInUser }) {
+            const photo = yield client_1.default.photo.findUnique({
+                where: {
+                    id,
+                },
+            });
+            if (!photo) {
+                return {
+                    ok: false,
+                    error: "Photo not found :(",
+                };
+            }
+            const likeWhere = {
+                photoId_userId: {
+                    userId: loggedInUser.id,
+                    photoId: id,
+                },
+            };
+            const like = yield client_1.default.like.findUnique({
+                where: likeWhere,
+            });
+            if (like) {
+                yield client_1.default.like.delete({
+                    where: likeWhere,
+                });
+            }
+            else {
+                yield client_1.default.like.create({
+                    data: {
+                        user: {
+                            connect: {
+                                id: loggedInUser.id,
+                            },
+                        },
+                        photo: {
+                            connect: {
+                                id: photo.id,
+                            },
+                        },
+                    },
+                });
+            }
+            return {
+                ok: true,
+            };
+        })),
+    },
+};
+exports.default = resolvers;

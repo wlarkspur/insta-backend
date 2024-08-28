@@ -1,11 +1,15 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const apollo_server_express_1 = require("apollo-server-express");
+exports.default = (0, apollo_server_express_1.gql) `
+  type SeeFollowersResult {
+    ok: Boolean!
+    error: String
+    followers: [User]
+    totalPages: Int
+  }
 
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
-var _apolloServerExpress = require("apollo-server-express");
-var _templateObject;
-var _default = exports["default"] = (0, _apolloServerExpress.gql)(_templateObject || (_templateObject = (0, _taggedTemplateLiteral2["default"])(["\n  type SeeFollowersResult {\n    ok: Boolean!\n    error: String\n    followers: [User]\n    totalPages: Int\n  }\n\n  type Query {\n    seeFollowers(username: String!, page: Int!): SeeFollowersResult\n  }\n"])));
+  type Query {
+    seeFollowers(username: String!, page: Int!): SeeFollowersResult
+  }
+`;

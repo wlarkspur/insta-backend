@@ -1,76 +1,54 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _client = _interopRequireDefault(require("../../client"));
-var _users = require("../../users/users.utils");
-var resolvers = {
-  Mutation: {
-    createComment: (0, _users.protectedResolver)( /*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, _ref, _ref2) {
-        var photoId, payload, loggedInUser, ok, newComment;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              photoId = _ref.photoId, payload = _ref.payload;
-              loggedInUser = _ref2.loggedInUser;
-              _context.next = 4;
-              return _client["default"].photo.findUnique({
-                where: {
-                  id: photoId
-                },
-                select: {
-                  id: true
-                }
-              });
-            case 4:
-              ok = _context.sent;
-              if (ok) {
-                _context.next = 7;
-                break;
-              }
-              return _context.abrupt("return", {
-                ok: false,
-                error: "Photo not found :("
-              });
-            case 7:
-              _context.next = 9;
-              return _client["default"].comment.create({
-                data: {
-                  payload: payload,
-                  photo: {
-                    connect: {
-                      id: photoId
-                    }
-                  },
-                  user: {
-                    connect: {
-                      id: loggedInUser.id
-                    }
-                  }
-                }
-              });
-            case 9:
-              newComment = _context.sent;
-              return _context.abrupt("return", {
-                ok: true,
-                id: newComment.id
-              });
-            case 11:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      return function (_x, _x2, _x3) {
-        return _ref3.apply(this, arguments);
-      };
-    }())
-  }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-var _default = exports["default"] = resolvers;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../../client"));
+const users_utils_1 = require("../../users/users.utils");
+const resolvers = {
+    Mutation: {
+        createComment: (0, users_utils_1.protectedResolver)((_1, _a, _b) => __awaiter(void 0, [_1, _a, _b], void 0, function* (_, { photoId, payload }, { loggedInUser }) {
+            const ok = yield client_1.default.photo.findUnique({
+                where: { id: photoId },
+                select: {
+                    id: true,
+                },
+            });
+            if (!ok) {
+                return {
+                    ok: false,
+                    error: "Photo not found :(",
+                };
+            }
+            const newComment = yield client_1.default.comment.create({
+                data: {
+                    payload,
+                    photo: {
+                        connect: {
+                            id: photoId,
+                        },
+                    },
+                    user: {
+                        connect: {
+                            id: loggedInUser.id,
+                        },
+                    },
+                },
+            });
+            return {
+                ok: true,
+                id: newComment.id,
+            };
+        })),
+    },
+};
+exports.default = resolvers;

@@ -1,68 +1,45 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _users = require("../users.utils");
-var _client = _interopRequireDefault(require("../../client"));
-var resolvers = {
-  Mutation: {
-    followUser: (0, _users.protectedResolver)( /*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, _ref, _ref2) {
-        var username, loggedInUser, ok;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              username = _ref.username;
-              loggedInUser = _ref2.loggedInUser;
-              _context.next = 4;
-              return _client["default"].user.findUnique({
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const users_utils_1 = require("../users.utils");
+const client_1 = __importDefault(require("../../client"));
+const resolvers = {
+    Mutation: {
+        followUser: (0, users_utils_1.protectedResolver)((_1, _a, _b) => __awaiter(void 0, [_1, _a, _b], void 0, function* (_, { username }, { loggedInUser }) {
+            const ok = yield client_1.default.user.findUnique({ where: { username } });
+            if (!ok) {
+                return {
+                    ok: false,
+                    error: "That user does not exist",
+                };
+            }
+            yield client_1.default.user.update({
                 where: {
-                  username: username
-                }
-              });
-            case 4:
-              ok = _context.sent;
-              if (ok) {
-                _context.next = 7;
-                break;
-              }
-              return _context.abrupt("return", {
-                ok: false,
-                error: "That user does not exist"
-              });
-            case 7:
-              _context.next = 9;
-              return _client["default"].user.update({
-                where: {
-                  id: loggedInUser.id
+                    id: loggedInUser.id,
                 },
                 data: {
-                  following: {
-                    connect: {
-                      username: username
-                    }
-                  }
-                }
-              });
-            case 9:
-              return _context.abrupt("return", {
-                ok: true
-              });
-            case 10:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      return function (_x, _x2, _x3) {
-        return _ref3.apply(this, arguments);
-      };
-    }())
-  }
+                    following: {
+                        connect: {
+                            username,
+                        },
+                    },
+                },
+            });
+            return {
+                ok: true,
+            };
+        })),
+    },
 };
-var _default = exports["default"] = resolvers;
+exports.default = resolvers;

@@ -1,81 +1,79 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-var _typeof = require("@babel/runtime/helpers/typeof");
-Object.defineProperty(exports, "__esModule", {
-  value: true
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
 });
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var bcrypt = _interopRequireWildcard(require("bcrypt"));
-function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-var resolvers = {
-  Mutation: {
-    createAccount: function () {
-      var _createAccount = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, _ref, _ref2) {
-        var firstName, lastName, username, email, password, client, existingUser, uglyPassword;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              firstName = _ref.firstName, lastName = _ref.lastName, username = _ref.username, email = _ref.email, password = _ref.password;
-              client = _ref2.client;
-              _context.prev = 2;
-              _context.next = 5;
-              return client.user.findFirst({
-                where: {
-                  OR: [{
-                    username: username
-                  }, {
-                    email: email
-                  }]
-                }
-              });
-            case 5:
-              existingUser = _context.sent;
-              if (!existingUser) {
-                _context.next = 8;
-                break;
-              }
-              throw new Error("This username/email is already taken :)");
-            case 8:
-              _context.next = 10;
-              return bcrypt.hash(password, 10);
-            case 10:
-              uglyPassword = _context.sent;
-              _context.next = 13;
-              return client.user.create({
-                data: {
-                  username: username,
-                  email: email,
-                  firstName: firstName,
-                  lastName: lastName,
-                  password: uglyPassword
-                }
-              });
-            case 13:
-              return _context.abrupt("return", {
-                ok: true
-              });
-            case 16:
-              _context.prev = 16;
-              _context.t0 = _context["catch"](2);
-              return _context.abrupt("return", {
-                ok: false,
-                error: "Can't create account"
-              });
-            case 19:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee, null, [[2, 16]]);
-      }));
-      function createAccount(_x, _x2, _x3) {
-        return _createAccount.apply(this, arguments);
-      }
-      return createAccount;
-    }()
-  }
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
-var _default = exports["default"] = resolvers;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const bcrypt = __importStar(require("bcrypt"));
+const resolvers = {
+    Mutation: {
+        createAccount: (_1, _a, _b) => __awaiter(void 0, [_1, _a, _b], void 0, function* (_, { firstName, lastName, username, email, password }, { client }) {
+            try {
+                // check if username or email are already on DB.
+                const existingUser = yield client.user.findFirst({
+                    where: {
+                        OR: [
+                            {
+                                username,
+                            },
+                            {
+                                email,
+                            },
+                        ],
+                    },
+                });
+                if (existingUser) {
+                    throw new Error("This username/email is already taken :)");
+                }
+                const uglyPassword = yield bcrypt.hash(password, 10);
+                yield client.user.create({
+                    data: {
+                        username,
+                        email,
+                        firstName,
+                        lastName,
+                        password: uglyPassword,
+                    },
+                });
+                return {
+                    ok: true,
+                };
+            }
+            catch (e) {
+                return {
+                    ok: false,
+                    error: "Can't create account",
+                };
+            }
+        }),
+    },
+};
+exports.default = resolvers;

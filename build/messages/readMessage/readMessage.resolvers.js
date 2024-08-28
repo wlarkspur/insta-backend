@@ -1,76 +1,57 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _client = _interopRequireDefault(require("../../client"));
-var _users = require("../../users/users.utils");
-var _default = exports["default"] = {
-  Mutation: {
-    readMessage: (0, _users.protectedResolver)( /*#__PURE__*/function () {
-      var _ref3 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, _ref, _ref2) {
-        var id, loggedInUser, message;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              id = _ref.id;
-              loggedInUser = _ref2.loggedInUser;
-              _context.next = 4;
-              return _client["default"].message.findFirst({
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../../client"));
+const users_utils_1 = require("../../users/users.utils");
+exports.default = {
+    Mutation: {
+        readMessage: (0, users_utils_1.protectedResolver)((_1, _a, _b) => __awaiter(void 0, [_1, _a, _b], void 0, function* (_, { id }, { loggedInUser }) {
+            const message = yield client_1.default.message.findFirst({
                 where: {
-                  id: id,
-                  userId: {
-                    not: loggedInUser.id
-                  },
-                  room: {
-                    users: {
-                      some: {
-                        id: loggedInUser.id
-                      }
-                    }
-                  }
+                    id,
+                    userId: {
+                        not: loggedInUser.id,
+                    },
+                    room: {
+                        users: {
+                            some: {
+                                id: loggedInUser.id,
+                            },
+                        },
+                    },
                 },
                 select: {
-                  id: true
-                }
-              });
-            case 4:
-              message = _context.sent;
-              if (message) {
-                _context.next = 7;
-                break;
-              }
-              return _context.abrupt("return", {
-                ok: false,
-                error: "Message not found."
-              });
-            case 7:
-              _context.next = 9;
-              return _client["default"].message.update({
+                    id: true,
+                },
+            });
+            if (!message) {
+                return {
+                    ok: false,
+                    error: "Message not found.",
+                };
+            }
+            yield client_1.default.message.update({
                 where: {
-                  id: id
+                    id,
                 },
                 data: {
-                  read: true
-                }
-              });
-            case 9:
-              return _context.abrupt("return", {
-                ok: true
-              });
-            case 10:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      return function (_x, _x2, _x3) {
-        return _ref3.apply(this, arguments);
-      };
-    }())
-  }
+                    read: true,
+                },
+            });
+            return {
+                ok: true,
+            };
+        })),
+    },
 };

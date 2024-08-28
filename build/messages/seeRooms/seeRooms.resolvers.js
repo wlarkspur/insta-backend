@@ -1,42 +1,32 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _client = _interopRequireDefault(require("../../client"));
-var _users = require("../../users/users.utils");
-var resolvers = {
-  Query: {
-    seeRooms: (0, _users.protectedResolver)( /*#__PURE__*/function () {
-      var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, __, _ref) {
-        var loggedInUser;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              loggedInUser = _ref.loggedInUser;
-              return _context.abrupt("return", _client["default"].room.findMany({
-                where: {
-                  users: {
-                    some: {
-                      id: loggedInUser.id
-                    }
-                  }
-                }
-              }));
-            case 2:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      return function (_x, _x2, _x3) {
-        return _ref2.apply(this, arguments);
-      };
-    }())
-  }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-var _default = exports["default"] = resolvers;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../../client"));
+const users_utils_1 = require("../../users/users.utils");
+const resolvers = {
+    Query: {
+        seeRooms: (0, users_utils_1.protectedResolver)((_1, __1, _a) => __awaiter(void 0, [_1, __1, _a], void 0, function* (_, __, { loggedInUser }) {
+            return client_1.default.room.findMany({
+                where: {
+                    users: {
+                        some: {
+                            id: loggedInUser.id,
+                        },
+                    },
+                },
+            });
+        })),
+    },
+};
+exports.default = resolvers;

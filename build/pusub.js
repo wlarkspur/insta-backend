@@ -1,9 +1,5 @@
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _apolloServerExpress = require("apollo-server-express");
-var pubsub = new _apolloServerExpress.PubSub();
-var _default = exports["default"] = pubsub;
+Object.defineProperty(exports, "__esModule", { value: true });
+const apollo_server_express_1 = require("apollo-server-express");
+const pubsub = new apollo_server_express_1.PubSub();
+exports.default = pubsub;

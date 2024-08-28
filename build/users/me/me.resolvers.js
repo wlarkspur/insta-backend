@@ -1,22 +1,17 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _client = _interopRequireDefault(require("../../client"));
-var _users = require("../users.utils");
-var resolvers = {
-  Query: {
-    me: (0, _users.protectedResolver)(function (_, __, _ref) {
-      var loggedInUser = _ref.loggedInUser;
-      return _client["default"].user.findUnique({
-        where: {
-          id: loggedInUser.id
-        }
-      });
-    })
-  }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _default = exports["default"] = resolvers;
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../../client"));
+const users_utils_1 = require("../users.utils");
+const resolvers = {
+    Query: {
+        me: (0, users_utils_1.protectedResolver)((_, __, { loggedInUser }) => client_1.default.user.findUnique({
+            where: {
+                id: loggedInUser.id,
+            },
+        })),
+    },
+};
+exports.default = resolvers;

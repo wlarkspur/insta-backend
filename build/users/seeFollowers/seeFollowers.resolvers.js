@@ -1,81 +1,47 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _client = _interopRequireDefault(require("../../client"));
-var resolvers = {
-  Query: {
-    seeFollowers: function () {
-      var _seeFollowers = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_, _ref) {
-        var username, page, ok, followers, totalFollowers;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              username = _ref.username, page = _ref.page;
-              _context.next = 3;
-              return _client["default"].user.findMany({
-                where: {
-                  username: username
-                },
-                select: {
-                  id: true
-                }
-              });
-            case 3:
-              ok = _context.sent;
-              if (ok) {
-                _context.next = 6;
-                break;
-              }
-              return _context.abrupt("return", {
-                ok: false,
-                error: "User not found"
-              });
-            case 6:
-              _context.next = 8;
-              return _client["default"].user.findUnique({
-                where: {
-                  username: username
-                }
-              }).followers({
-                take: 5,
-                skip: (page - 1) * 5
-              });
-            case 8:
-              followers = _context.sent;
-              _context.next = 11;
-              return _client["default"].user.count({
-                where: {
-                  following: {
-                    some: {
-                      username: username
-                    }
-                  }
-                }
-              });
-            case 11:
-              totalFollowers = _context.sent;
-              return _context.abrupt("return", {
-                ok: true,
-                followers: followers,
-                totalPages: Math.ceil(totalFollowers / 5)
-              });
-            case 13:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      function seeFollowers(_x, _x2) {
-        return _seeFollowers.apply(this, arguments);
-      }
-      return seeFollowers;
-    }()
-  }
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
-var _default = exports["default"] = resolvers;
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const client_1 = __importDefault(require("../../client"));
+const resolvers = {
+    Query: {
+        seeFollowers: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { username, page }) {
+            const ok = yield client_1.default.user.findMany({
+                where: { username },
+                select: { id: true },
+            });
+            if (!ok) {
+                return {
+                    ok: false,
+                    error: "User not found",
+                };
+            }
+            const followers = yield client_1.default.user
+                .findUnique({ where: { username } })
+                .followers({
+                take: 5,
+                skip: (page - 1) * 5,
+            });
+            const totalFollowers = yield client_1.default.user.count({
+                where: { following: { some: { username } } },
+            });
+            return {
+                ok: true,
+                followers,
+                totalPages: Math.ceil(totalFollowers / 5),
+            };
+            //팔로워를 client.user.findMany 후 Javascript를 이용해서 단순계산시 많은 비용을 발생시킬 수 있다. client.user.count옵션이 있다.
+        }),
+    },
+};
+exports.default = resolvers;

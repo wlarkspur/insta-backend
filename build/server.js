@@ -1,114 +1,75 @@
 "use strict";
-
-var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
-var _graphqlUploadTs = require("graphql-upload-ts");
-var _http = _interopRequireDefault(require("http"));
-var _express = _interopRequireDefault(require("express"));
-var _morgan = _interopRequireDefault(require("morgan"));
-var _apolloServerExpress = require("apollo-server-express");
-var _schema = require("./schema");
-var _client = _interopRequireDefault(require("./client"));
-var _users = require("./users/users.utils");
-var _pusub = _interopRequireDefault(require("./pusub"));
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const graphql_upload_ts_1 = require("graphql-upload-ts");
 require("dotenv").config();
-console.log(_pusub["default"]);
-var PORT = process.env.PORT;
-var apollo = new _apolloServerExpress.ApolloServer({
-  typeDefs: _schema.typeDefs,
-  resolvers: _schema.resolvers,
-  uploads: false,
-  //Apollo Server 3.x 이하에서는 이 옵션을 설정해야 한다 ??
-  playground: true,
-  //ctx는 HTTP or websocket context가 될 수 있다.
-  context: function () {
-    var _context = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(ctx) {
-      var _context2;
-      return _regenerator["default"].wrap(function _callee$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            if (!ctx.req) {
-              _context3.next = 9;
-              break;
-            }
-            _context3.next = 3;
-            return (0, _users.getUser)(ctx.req.headers.token);
-          case 3:
-            _context3.t0 = _context3.sent;
-            _context3.t1 = _client["default"];
-            _context3.t2 = _users.protectedResolver;
-            return _context3.abrupt("return", {
-              loggedInUser: _context3.t0,
-              client: _context3.t1,
-              protectedResolver: _context3.t2
-            });
-          case 9:
-            _context2 = ctx.connection.context;
-            return _context3.abrupt("return", {
-              loggedInUser: _context2.loggedInUser
-            });
-          case 11:
-          case "end":
-            return _context3.stop();
+const http_1 = __importDefault(require("http"));
+const express_1 = __importDefault(require("express"));
+const morgan_1 = __importDefault(require("morgan"));
+const apollo_server_express_1 = require("apollo-server-express");
+const schema_1 = require("./schema");
+const client_1 = __importDefault(require("./client"));
+const users_utils_1 = require("./users/users.utils");
+const pusub_1 = __importDefault(require("./pusub"));
+console.log(pusub_1.default);
+const PORT = process.env.PORT;
+const apollo = new apollo_server_express_1.ApolloServer({
+    typeDefs: schema_1.typeDefs,
+    resolvers: schema_1.resolvers,
+    uploads: false, //Apollo Server 3.x 이하에서는 이 옵션을 설정해야 한다 ??
+    playground: true,
+    //ctx는 HTTP or websocket context가 될 수 있다.
+    context: (ctx) => __awaiter(void 0, void 0, void 0, function* () {
+        if (ctx.req) {
+            return {
+                loggedInUser: yield (0, users_utils_1.getUser)(ctx.req.headers.token),
+                client: client_1.default,
+                protectedResolver: users_utils_1.protectedResolver,
+            };
         }
-      }, _callee);
-    }));
-    function context(_x) {
-      return _context.apply(this, arguments);
-    }
-    return context;
-  }(),
-  subscriptions: {
-    onConnect: function () {
-      var _onConnect = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_ref) {
-        var token, loggedInUser;
-        return _regenerator["default"].wrap(function _callee2$(_context4) {
-          while (1) switch (_context4.prev = _context4.next) {
-            case 0:
-              token = _ref.token;
-              if (token) {
-                _context4.next = 3;
-                break;
-              }
-              throw new Error("You can't listen");
-            case 3:
-              _context4.next = 5;
-              return (0, _users.getUser)(token);
-            case 5:
-              loggedInUser = _context4.sent;
-              return _context4.abrupt("return", {
-                loggedInUser: loggedInUser
-              });
-            case 7:
-            case "end":
-              return _context4.stop();
-          }
-        }, _callee2);
-      }));
-      function onConnect(_x2) {
-        return _onConnect.apply(this, arguments);
-      }
-      return onConnect;
-    }()
-  }
+        else {
+            const { connection: { context }, } = ctx;
+            return {
+                loggedInUser: context.loggedInUser,
+            };
+        }
+    }),
+    subscriptions: {
+        onConnect: (_a) => __awaiter(void 0, [_a], void 0, function* ({ token }) {
+            /* console.log(token); */
+            if (!token) {
+                throw new Error("You can't listen");
+            } // token authentication option은 public설정시 삭제해도 됨.
+            const loggedInUser = yield (0, users_utils_1.getUser)(token);
+            return {
+                loggedInUser,
+            };
+        }),
+    },
 });
-
 //Web Socket 에는 req,res 가 없다.
-
-var app = (0, _express["default"])();
-app.use((0, _graphqlUploadTs.graphqlUploadExpress)({
-  maxFileSize: 50000000,
-  maxFiles: 10,
-  overrideSendResponse: false
+const app = (0, express_1.default)();
+app.use((0, graphql_upload_ts_1.graphqlUploadExpress)({
+    maxFileSize: 50000000,
+    maxFiles: 10,
+    overrideSendResponse: false,
 }));
-app.use((0, _morgan["default"])("tiny"));
-apollo.applyMiddleware({
-  app: app
-});
-app.use("/static", _express["default"]["static"]("uploads"));
-var httpServer = _http["default"].createServer(app);
+app.use((0, morgan_1.default)("tiny"));
+apollo.applyMiddleware({ app });
+app.use("/static", express_1.default.static("uploads"));
+const httpServer = http_1.default.createServer(app);
 apollo.installSubscriptionHandlers(httpServer);
-httpServer.listen(PORT, function () {
-  console.log("\uD83D\uDE80 Server is running on http://localhost:".concat(PORT, "/graphql \u2705"));
+httpServer.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}/graphql ✅`);
 });
