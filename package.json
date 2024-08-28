@@ -67,6 +67,6 @@
     "typescript": "^5.3.3"
   },
   "resolutions": {
-    "fs-capacitor": "^8.0.0"
+    "fs-capacitor": "8.0.0"
   }
 }
