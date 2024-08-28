@@ -130,4 +130,3 @@ dist
 .pnp.*
 
 babel.config.json
-build
