@@ -13,7 +13,7 @@
     "migrate": "npx prisma migrate dev",
     "studio": "npx prisma studio",
     "build": "npx babel src --out-dir build --extensions \".ts,.js\"",
-    "start": "node build/server"
+    "start": "node build/server.js"
   },
   "repository": {
     "type": "git",
