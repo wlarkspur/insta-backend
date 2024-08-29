@@ -57,3 +57,4 @@ Instanclone Backend.
 "node": "20.11.0",
 "npm": "10.8.2"
 },
+"@babel/plugin-transform-modules-commonjs",
