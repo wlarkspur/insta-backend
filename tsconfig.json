@@ -3,11 +3,12 @@
     "outDir": "./build",
     "rootDir": "./src",
     "allowJs": true,
-    "target": "es6",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "module": "CommonJS",
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "@users/*": ["src/users/*"]
