@@ -10,7 +10,7 @@ var _morgan = _interopRequireDefault(require("morgan"));
 var _apolloServerExpress = require("apollo-server-express");
 var _schema = require("./schema");
 var _client = _interopRequireDefault(require("./client"));
-var _users = require("./users/users.utils");
+var _users = require("../src/users/users.utils");
 require("dotenv").config();
 /* console.log(pubsub); */
 
