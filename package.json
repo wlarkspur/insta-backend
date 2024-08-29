@@ -52,8 +52,8 @@
     "graphql-upload-ts": "^2.1.2",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "prisma": "^5.10.2",
-    "strip-ansi": "^7.1.0"
+    "prisma": "^5.10.2"
+    
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
