@@ -4,14 +4,14 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 var _graphqlUploadTs = require("graphql-upload-ts");
+require("dotenv/config.js");
 var _http = _interopRequireDefault(require("http"));
 var _express = _interopRequireDefault(require("express"));
 var _morgan = _interopRequireDefault(require("morgan"));
 var _apolloServerExpress = require("apollo-server-express");
 var _schema = require("./schema");
 var _client = _interopRequireDefault(require("./client"));
-var _users = require("../src/users/users.utils");
-require("dotenv").config();
+var _users = require("./users/users.utils");
 /* console.log(pubsub); */
 
 var PORT = process.env.PORT;

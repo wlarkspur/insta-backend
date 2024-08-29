@@ -1,5 +1,5 @@
 import { graphqlUploadExpress } from "graphql-upload-ts";
-require("dotenv").config();
+import "dotenv/config.js";
 import http from "http";
 import express from "express";
 import logger from "morgan";
