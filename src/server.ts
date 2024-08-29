@@ -9,7 +9,7 @@ import client from "./client";
 import { getUser, protectedResolver } from "../src/users/users.utils";
 import pubsub from "./pusub";
 
-console.log(pubsub);
+/* console.log(pubsub); */
 
 const PORT = process.env.PORT;
 const apollo = new ApolloServer({

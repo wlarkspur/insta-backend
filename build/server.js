@@ -11,9 +11,9 @@ var _apolloServerExpress = require("apollo-server-express");
 var _schema = require("./schema");
 var _client = _interopRequireDefault(require("./client"));
 var _users = require("./users/users.utils");
-var _pusub = _interopRequireDefault(require("./pusub"));
 require("dotenv").config();
-console.log(_pusub["default"]);
+/* console.log(pubsub); */
+
 var PORT = process.env.PORT;
 var apollo = new _apolloServerExpress.ApolloServer({
   typeDefs: _schema.typeDefs,

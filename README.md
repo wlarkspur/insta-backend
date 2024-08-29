@@ -53,3 +53,7 @@ Instanclone Backend.
 "scripts": {
 "heroku-postbuild": "npm install --legacy-peer-deps"
 }
+"engines": {
+"node": "20.11.0",
+"npm": "10.8.2"
+},
