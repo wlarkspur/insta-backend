@@ -58,3 +58,5 @@ Instanclone Backend.
 "npm": "10.8.2"
 },
 "@babel/plugin-transform-modules-commonjs",
+
+"fs": "^0.0.1-security",
