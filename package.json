@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/wlarkspur/insta-backend#readme",
   "dependencies": {
+    "@apollographql/graphql-upload-8-fork": "^8.1.4",
     "@babel/cli": "^7.24.8",
     "@babel/core": "^7.23.9",
     "@babel/node": "^7.23.9",
