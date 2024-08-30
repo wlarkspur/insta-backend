@@ -18,6 +18,8 @@ const apollo = new ApolloServer({
   uploads: false, //Apollo Server 3.x 이하에서는 이 옵션을 설정해야 한다 ??
   playground: true,
   introspection: true,
+  // 실제 개발에 playground, introspection 은 필요없다.
+  // 다른 누군가 내 playground에서 back-end를 볼 수 있다.
   //ctx는 HTTP or websocket context가 될 수 있다.
   context: async (ctx) => {
     if (ctx.req) {

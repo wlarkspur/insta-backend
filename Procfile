@@ -1,1 +1,2 @@
-web: node build/server.js
+release: prisma migrate deploy
+web: npm start

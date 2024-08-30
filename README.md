@@ -60,3 +60,5 @@ Instanclone Backend.
 "@babel/plugin-transform-modules-commonjs",
 
 "fs": "^0.0.1-security",
+Procfile
+web: node build/server.js
